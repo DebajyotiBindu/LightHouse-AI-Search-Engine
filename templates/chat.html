@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LightHouse</title>
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Marked.js for Markdown parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        :root {
+            --sidebar-bg: #171717;
+            --main-bg: #212121;
+            --panel-bg: #2f2f2f;
+            --border-color: #383838;
+            --text-primary: #ececec;
+            --text-secondary: #b4b4b4;
+            --user-bubble: #2f2f2f;
+            --radius-lg: 16px;
+            --radius-md: 10px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--main-bg);
+            color: var(--text-primary);
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* Sidebar Layout */
+        .sidebar {
+            width: 260px;
+            background-color: var(--sidebar-bg);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 12px;
+        }
+
+        .sidebar-top {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .sidebar-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            padding: 10px 12px;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            text-align: left;
+            transition: background 0.2s;
+        }
+
+        .sidebar-btn:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .sidebar-section-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            padding: 16px 12px 6px 12px;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .sidebar-item {
+            padding: 8px 12px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            line-height: 1.4;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .sidebar-item:hover {
+            background-color: rgba(255, 255, 255, 0.04);
+            color: var(--text-primary);
+        }
+
+        /* Main Workspace Layout */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            position: relative;
+            background-color: var(--main-bg);
+        }
+
+        .chat-header {
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+            border-bottom: 1px solid transparent;
+            z-index: 10;
+        }
+
+        .model-selector {
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 15px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        /* Chat Scroll Stream Feed */
+        .workspace-scroll {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 20px 140px 20px;
+            scroll-behavior: smooth;
+        }
+
+        .workspace-inner {
+            width: 100%;
+            max-width: 760px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .hero-welcome {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 50vh;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 26px;
+            font-weight: 600;
+            color: var(--text-primary);
+            letter-spacing: -0.01em;
+            margin-bottom: 0;
+        }
+
+        /* Message Bubbles / Turns */
+        .message-row {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            gap: 6px;
+        }
+
+        .message-row.user {
+            align-items: flex-end;
+        }
+
+        .message-row.assistant {
+            align-items: flex-start;
+        }
+
+        .message-bubble {
+            max-width: 85%;
+            padding: 14px 18px;
+            border-radius: var(--radius-lg);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .message-row.user .message-bubble {
+            background-color: var(--user-bubble);
+            color: var(--text-primary);
+            border-bottom-right-radius: 4px;
+        }
+
+        .message-row.assistant .message-bubble {
+            background-color: transparent;
+            color: var(--text-primary);
+            padding-left: 0;
+            padding-right: 0;
+            width: 100%;
+        }
+
+        /* Review / Sub-queries Interactive Card inside stream */
+        .review-box {
+            width: 100%;
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            margin-top: 10px;
+        }
+
+        .sub-query-wrapper {
+            margin-bottom: 10px;
+            background: var(--main-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 8px 12px;
+        }
+
+        .sub-query-input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            color: var(--text-primary);
+            outline: none;
+        }
+
+        /* Markdown Output Styles */
+        .markdown-output h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+            margin-top: 16px;
+            margin-bottom: 8px;
+        }
+
+        .markdown-output p {
+            margin-bottom: 12px;
+        }
+
+        .markdown-output ul, .markdown-output ol {
+            padding-left: 20px;
+            margin-bottom: 12px;
+        }
+
+        /* Fixed Bottom Input Area */
+        .bottom-input-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(to top, var(--main-bg) 70%, rgba(33,33,33,0));
+            padding: 20px 24px 24px 24px;
+            display: flex;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .input-card {
+            width: 100%;
+            max-width: 760px;
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 12px 16px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            transition: border-color 0.2s;
+        }
+
+        .input-card:focus-within {
+            border-color: #525252;
+        }
+
+        textarea {
+            width: 100%;
+            background: transparent;
+            border: none;
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            color: var(--text-primary);
+            outline: none;
+            resize: none;
+            min-height: 24px;
+            max-height: 150px;
+            line-height: 1.5;
+        }
+
+        .input-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        button.submit-icon-btn {
+            background-color: var(--text-primary);
+            color: var(--main-bg);
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        button.submit-icon-btn:hover {
+            opacity: 0.85;
+        }
+
+        .action-btn {
+            background-color: var(--text-primary);
+            color: var(--main-bg);
+            border: none;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            font-size: 13px;
+            padding: 8px 16px;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .action-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* Loading Indicator */
+        #loading {
+            display: none;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+            color: var(--text-secondary);
+            font-size: 13px;
+            margin-top: 12px;
+        }
+
+        .spinner {
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--border-color);
+            border-top-color: var(--text-primary);
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Section -->
+    <aside class="sidebar">
+        <div class="sidebar-top">
+            <button class="sidebar-btn" onclick="resetApp()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                New Research
+            </button>
+            <div class="sidebar-section-title">Quick Actions & Tips</div>
+            <div class="sidebar-item">💡 Tip: Review sub-queries before synthesizing.</div>
+            <div class="sidebar-item">⚙️ Engine: LangGraph + FastAPI Active</div>
+            <div class="sidebar-item">🔍 Mode: Deep Multi-Step Research</div>
+        </div>
+        <div>
+            <div class="sidebar-item" style="color: var(--text-primary); font-weight: 500;">AI Workspace v2.6</div>
+        </div>
+    </aside>
+
+    <!-- Main Chat Workspace -->
+    <main class="main-content">
+        <header class="chat-header">
+            <button class="model-selector">
+                Research Engine 
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+        </header>
+
+        <!-- Continuous Chat Stream -->
+        <div class="workspace-scroll" id="workspace-scroll">
+            <div class="workspace-inner" id="chat-stream">
+                
+                <!-- Initial Hero Welcome State -->
+                <div id="hero-welcome" class="hero-welcome">
+                    <h1 class="hero-title">What's on your mind today?</h1>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Floating Bottom Input Bar -->
+        <div class="bottom-input-container">
+            <div class="input-card">
+                <textarea id="query" placeholder="Ask anything..." rows="1" oninput="autoResize(this)" onkeydown="handleKeyDown(event)"></textarea>
+                <div class="input-footer">
+                    <span style="font-size: 11px; color: var(--text-secondary);">LangGraph Enabled</span>
+                    <button class="submit-icon-btn" onclick="submitInitialQuery()" id="submit-btn" title="Send Query">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <input type="hidden" id="thread_id">
+
+    <script>
+        const API_ENDPOINT = "/chat/";
+
+        function autoResize(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = textarea.scrollHeight + 'px';
+        }
+
+        function handleKeyDown(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                submitInitialQuery();
+            }
+        }
+
+        function scrollToBottom() {
+            const scrollContainer = document.getElementById("workspace-scroll");
+            scrollContainer.scrollTop = scrollContainer.scrollHeight;
+        }
+
+        async function submitInitialQuery() {
+            const queryInput = document.getElementById("query");
+            const query = queryInput.value.trim();
+            if (!query) return;
+
+            // Remove welcome screen on first query
+            const hero = document.getElementById("hero-welcome");
+            if (hero) hero.remove();
+
+            const stream = document.getElementById("chat-stream");
+
+            // Append User Message Bubble
+            stream.innerHTML += `
+                <div class="message-row user">
+                    <div class="message-bubble">${escapeHtml(query)}</div>
+                </div>
+            `;
+
+            queryInput.value = "";
+            queryInput.style.height = 'auto';
+            scrollToBottom();
+
+            // Append Loading Indicator inside stream
+            const loadingId = "loading-" + Date.now();
+            stream.innerHTML += `
+                <div class="message-row assistant" id="${loadingId}">
+                    <div id="loading" style="display: flex;">
+                        <div class="spinner"></div>
+                        <p>Synthesizing research graph...</p>
+                    </div>
+                </div>
+            `;
+            scrollToBottom();
+
+            try {
+                const response = await fetch(API_ENDPOINT, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ query: query })
+                });
+                
+                const data = await response.json();
+                document.getElementById(loadingId).remove();
+
+                if (data.status === "pending_review") {
+                    document.getElementById("thread_id").value = data.thread_id;
+                    const subQueries = data.sub_queries || data.sub_query || [];
+                    
+                    let subQueriesHtml = "";
+                    subQueries.forEach((subQ) => {
+                        subQueriesHtml += `
+                            <div class="sub-query-wrapper">
+                                <input type="text" value="${escapeHtml(subQ)}" class="sub-query-input">
+                            </div>
+                        `;
+                    });
+
+                    // Append Review Card as Assistant Turn
+                    stream.innerHTML += `
+                        <div class="message-row assistant" id="active-review-card">
+                            <div class="message-bubble" style="width: 100%;">
+                                <p style="font-weight: 500; margin-bottom: 8px; color: var(--text-primary);">Refine Sub-Queries before synthesizing:</p>
+                                <div class="review-box">
+                                    ${subQueriesHtml}
+                                    <div style="display: flex; justify-content: flex-end; margin-top: 14px;">
+                                        <button class="action-btn" onclick="submitFinalGeneration()">Synthesize Report</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    scrollToBottom();
+                } else {
+                    alert("Unexpected response status: " + data.status);
+                }
+            } catch (error) {
+                console.error("Fetch Error:", error);
+                document.getElementById(loadingId).remove();
+                alert("Something went wrong connecting to backend.");
+            }
+        }
+
+        async function submitFinalGeneration() {
+            const queryElems = document.querySelectorAll(".message-row.user");
+            const lastUserQuery = queryElems[queryElems.length - 1].innerText.trim();
+            const threadId = document.getElementById("thread_id").value;
+            const updatedQueries = Array.from(document.querySelectorAll(".sub-query-input")).map(input => input.value);
+
+            // Remove active review card
+            const reviewCard = document.getElementById("active-review-card");
+            if (reviewCard) reviewCard.remove();
+
+            const stream = document.getElementById("chat-stream");
+
+            // Create placeholder bubble for streaming effect
+            const outputBubbleId = "output-bubble-" + Date.now();
+            stream.innerHTML += `
+                <div class="message-row assistant">
+                    <div class="message-bubble">
+                        <div class="markdown-output" id="${outputBubbleId}">
+                            <div id="loading" style="display: flex;">
+                                <div class="spinner"></div>
+                                <p>Streaming final research synthesis...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            scrollToBottom();
+
+            try {
+                const response = await fetch(API_ENDPOINT, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        query: lastUserQuery,
+                        updated_query: updatedQueries,
+                        thread_id: threadId
+                    })
+                });
+                const data = await response.json();
+
+                if (data.status === "completed") {
+                    const outputText = data.output || data.Output || "No output returned.";
+                    const targetContainer = document.getElementById(outputBubbleId);
+                    
+                    // Simulate typewritten streaming effect token by token
+                    targetContainer.innerHTML = "";
+                    let charIndex = 0;
+                    
+                    function streamText() {
+                        if (charIndex < outputText.length) {
+                            // Append chunks dynamically
+                            charIndex += Math.max(1, Math.floor(outputText.length / 40)); 
+                            const currentSlice = outputText.substring(0, charIndex);
+                            
+                            if (typeof marked !== 'undefined') {
+                                targetContainer.innerHTML = marked.parse(currentSlice);
+                            } else {
+                                targetContainer.innerText = currentSlice;
+                            }
+                            scrollToBottom();
+                            setTimeout(streamText, 15);
+                        } else {
+                            // Ensure final markdown parse is pristine
+                            if (typeof marked !== 'undefined') {
+                                targetContainer.innerHTML = marked.parse(outputText);
+                            } else {
+                                targetContainer.innerText = outputText;
+                            }
+                            scrollToBottom();
+                        }
+                    }
+                    
+                    streamText();
+                } else {
+                    document.getElementById(outputBubbleId).innerText = "Execution finished, but status was: " + data.status;
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                document.getElementById(outputBubbleId).innerText = "Failed to complete graph execution.";
+            }
+        }
+
+        function resetApp() {
+            document.getElementById("chat-stream").innerHTML = `
+                <div id="hero-welcome" class="hero-welcome">
+                    <h1 class="hero-title">What's on your mind today?</h1>
+                </div>
+            `;
+            document.getElementById("thread_id").value = "";
+            document.getElementById("query").value = "";
+        }
+
+        function escapeHtml(text) {
+            const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+            return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+        }
+    </script>
+</body>
+</html>

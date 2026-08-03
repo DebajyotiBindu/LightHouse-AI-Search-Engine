@@ -1,0 +1,14 @@
+langchain
+langsmith
+python-dotenv
+langgraph
+langchain-core
+langchain-classic
+langchain-community
+langchain_tavily
+langchain_groq
+huggingface-hub
+sqlite3
+langgraph-checkpoint-sqlite
+fastapi
+uvicorn
