@@ -55,7 +55,7 @@ git clone https://github.com/DebajyotiBindu/LightHouse-AI-Search-Engine.git
 <img width="785" height="600" alt="Screenshot 2026-08-03 161832" src="https://github.com/user-attachments/assets/a990bd5a-270c-4f0f-9047-7a3111af59b6" />
 
 ### Chat Page
-<img width="785" height="600" alt="Screenshot 2026-08-03 154031" src="https://github.com/user-attachments/assets/92253f4e-29f4-4816-b752-fd46d68a5eeb" />
+<img width="785" height="600" alt="Screenshot 2026-08-03 154019" src="https://github.com/user-attachments/assets/7dabee06-cdb5-4806-81a0-5634fbba14ae" />
 <img width="785" height="600" alt="Screenshot 2026-08-03 154104" src="https://github.com/user-attachments/assets/8634e4be-73ee-4d4a-8765-f315001a2bf9" />
 <img width="785" height="600" alt="Screenshot 2026-08-03 154146" src="https://github.com/user-attachments/assets/2d849f64-9486-42bd-94eb-11d092639844" />
 <img width="785" height="600" alt="Screenshot 2026-08-03 154201" src="https://github.com/user-attachments/assets/e4da6589-9189-476d-b619-3fba749104db" />
