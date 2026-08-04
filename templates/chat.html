@@ -513,7 +513,24 @@
                         </div>
                     `;
                     scrollToBottom();
-                } else {
+                } 
+                else if (data.status === "completed") {
+                    // Handle instant completion/cache hit directly!
+                    document.getElementById("thread_id").value = data.thread_id;
+                    const outputText = data.output || data.Output || "No output returned.";
+                    
+                    stream.innerHTML += `
+                        <div class="message-row assistant">
+                            <div class="message-bubble">
+                                <div class="markdown-output">
+                                    ${typeof marked !== 'undefined' ? marked.parse(outputText) : escapeHtml(outputText)}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    scrollToBottom();
+                } 
+                else {
                     alert("Unexpected response status: " + data.status);
                 }
             } catch (error) {

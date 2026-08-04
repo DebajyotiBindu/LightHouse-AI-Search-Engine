@@ -13,3 +13,4 @@ langgraph-checkpoint-sqlite
 fastapi
 uvicorn
 langchain_huggingface
+sentence-transformers

@@ -20,6 +20,7 @@ parts/
 sdist/
 var/
 db.sqlite3
+caching/
 checkpoints/
 wheels/
 share/python-wheels/
