@@ -5,6 +5,11 @@
 LightHouse is an autonomous, graph-driven AI search and research engine engineered to cut through digital noise. Rather than relying on superficial keyword matching or static outputs, LightHouse uses an active multi-step pipeline to decompose complex queries, retrieve high-signal documents from across the web, and stream structured markdown synthesis directly to your interactive workspace.
 
 ---
+## Architectural Workflow Diagram
+<img width="852" height="782" alt="Screenshot 2026-08-03 160040" src="https://github.com/user-attachments/assets/9132abf2-5bc9-45eb-b56f-d0afa5c38487" />
+
+## Folder Structure (Folder structure too big to manually add in markdown)
+<img width="885" height="723" alt="Screenshot 2026-08-03 161832" src="https://github.com/user-attachments/assets/871029b2-1d8b-4471-ad35-995cf90dbcd1" />
 
 ## Architectural Overview
 
@@ -44,3 +49,14 @@ LightHouse combines deterministic human-in-the-loop control with resilient LangG
 ```bash
 git clone https://github.com/DebajyotiBindu/LightHouse-AI-Search-Engine.git
 ```
+
+## Some Screenshots of LightHouse:
+### Home Page
+<img width="785" height="600" alt="Screenshot 2026-08-03 161832" src="https://github.com/user-attachments/assets/a990bd5a-270c-4f0f-9047-7a3111af59b6" />
+
+### Chat Page
+<img width="785" height="600" alt="Screenshot 2026-08-03 154031" src="https://github.com/user-attachments/assets/92253f4e-29f4-4816-b752-fd46d68a5eeb" />
+<img width="785" height="600" alt="Screenshot 2026-08-03 154104" src="https://github.com/user-attachments/assets/8634e4be-73ee-4d4a-8765-f315001a2bf9" />
+<img width="785" height="600" alt="Screenshot 2026-08-03 154146" src="https://github.com/user-attachments/assets/2d849f64-9486-42bd-94eb-11d092639844" />
+<img width="785" height="600" alt="Screenshot 2026-08-03 154201" src="https://github.com/user-attachments/assets/e4da6589-9189-476d-b619-3fba749104db" />
+
