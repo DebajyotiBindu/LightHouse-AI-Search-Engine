@@ -14,12 +14,12 @@ FASTAPI_URL="http://127.0.0.1:8001"
 async def chat(request):
     if request.method=="POST":
         try:
-            body = json.loads(request.body.decode('utf-8'))
-            query = body.get("query")
-            thread_id = body.get("thread_id")
-            updated_queries = body.get("updated_query") 
+            body=json.loads(request.body.decode('utf-8'))
+            query=body.get("query")
+            thread_id=body.get("thread_id")
+            updated_queries=body.get("updated_query") 
         except json.JSONDecodeError:
-            return JsonResponse({"error": "Invalid JSON payload"}, status=400)
+            return JsonResponse({"error":"Invalid JSON payload"},status=400)
 
         payload = {
             "query":query,

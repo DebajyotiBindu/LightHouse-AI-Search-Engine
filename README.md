@@ -1,4 +1,4 @@
-# LightHouse 
+# LightHouse
 
 > Navigate through the sea of information.
 
