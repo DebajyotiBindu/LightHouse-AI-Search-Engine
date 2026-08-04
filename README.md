@@ -24,7 +24,7 @@ LightHouse moves beyond traditional LLM wrappers by implementing a structured ag
 
 ---
 
-## 🛠️ Technical Stack & Architecture
+## Technical Stack & Architecture
 
 * **Backend Framework:** FastAPI (Python) for ultra-fast asynchronous routing and API management.
 * **Orchestration & State Management:** LangGraph / LangChain for managing multi-step agent graphs and context threads.
@@ -32,9 +32,15 @@ LightHouse moves beyond traditional LLM wrappers by implementing a structured ag
 
 ---
 
+## Why LightHouse?
+
+LightHouse combines deterministic human-in-the-loop control with resilient LangGraph state management and request caching. This ensures reliable, multi-step research workflows that avoid redundant API compute overhead while delivering high-signal, fully transparent insights.
+
+---
+
 ## Quick Start Guide
 
 ### 1. Clone the Repository
-```
-git clone [https://github.com/DebajyotiBindu/LightHouse-AI-Search-Engine.git](https://github.com/DebajyotiBindu/LightHouse-AI-Search-Engine.git)
+```bash
+git clone https://github.com/DebajyotiBindu/LightHouse-AI-Search-Engine.git
 ```
