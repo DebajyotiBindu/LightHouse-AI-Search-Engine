@@ -5,6 +5,11 @@
 LightHouse is an autonomous, graph-driven AI search and research engine engineered to cut through digital noise. Rather than relying on superficial keyword matching or static outputs, LightHouse uses an active multi-step pipeline to decompose complex queries, retrieve high-signal documents from across the web, and stream structured markdown synthesis directly to your interactive workspace.
 
 ---
+## Why LightHouse?
+
+LightHouse combines deterministic human-in-the-loop control with resilient LangGraph state management and request caching. This ensures reliable, multi-step research workflows that avoid redundant API compute overhead while delivering high-signal, fully transparent insights.
+
+---
 ## Architectural Workflow Diagram
 <img width="700" height="582" alt="Screenshot 2026-08-03 160040" src="https://github.com/user-attachments/assets/9132abf2-5bc9-45eb-b56f-d0afa5c38487" />
 
@@ -36,13 +41,6 @@ LightHouse moves beyond traditional LLM wrappers by implementing a structured ag
 * **Frontend Interface:** Pure HTML5, CSS3, and JavaScript featuring a modern dark-mode developer aesthetic (`#0b0f19` theme), custom Inter typography, and dynamic DOM manipulation.
 
 ---
-
-## Why LightHouse?
-
-LightHouse combines deterministic human-in-the-loop control with resilient LangGraph state management and request caching. This ensures reliable, multi-step research workflows that avoid redundant API compute overhead while delivering high-signal, fully transparent insights.
-
----
-
 ## Quick Start Guide
 
 ### 1. Clone the Repository
