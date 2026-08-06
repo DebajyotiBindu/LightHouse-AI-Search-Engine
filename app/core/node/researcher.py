@@ -4,6 +4,7 @@ from langchain_tavily import TavilySearch
 from dotenv import load_dotenv
 from pydantic import BaseModel
 from typing import List,Dict
+from langsmith import traceable
 
 load_dotenv()
 
@@ -19,6 +20,7 @@ class Research:
     def __init__(self):
         pass
 
+    @traceable(name="Research")
     def __call__(self,state:dict)->dict:
         try:
             query=state.get("sub_query")

@@ -3,6 +3,7 @@ from langchain_groq import ChatGroq
 import os
 from dotenv import load_dotenv
 from typing import List,Dict
+from langsmith import traceable
 
 load_dotenv()
 
@@ -11,6 +12,7 @@ class Generator:
     def __init__(self):
         self.model_version="openai/gpt-oss-120b"
 
+    @traceable(name="Generator")
     def __call__(self,state:dict) -> dict:
         """
         Receives the original query and the synthesized context, then produces the final output.

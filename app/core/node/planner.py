@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from langchain_groq import ChatGroq
 from typing import List
 from langgraph.types import Overwrite
+from langsmith import traceable
 
 load_dotenv()
 
@@ -15,7 +16,8 @@ class OutputFormat(BaseModel):
 class Planner:
     def __init__(self):
         self.model_version="openai/gpt-oss-120b"
-    
+
+    @traceable(name="Planner")
     def __call__(self,state:dict)->dict:
         query=state.get("query")
         try:

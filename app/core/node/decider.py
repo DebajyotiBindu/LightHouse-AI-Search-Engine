@@ -3,6 +3,7 @@ from langchain_groq import ChatGroq
 from typing import Dict,List
 import os
 from dotenv import load_dotenv
+from langsmith import traceable
 
 load_dotenv()
 
@@ -14,7 +15,8 @@ class DeciderOutput(BaseModel):
 class Decider:
     def __init__(self):
         self.model_version="llama-3.1-8b-instant"
-    
+
+    @traceable(name="Decider")
     def __call__(self,state:dict)->dict:
         query=state.get("query")
         finding=state.get("research")
